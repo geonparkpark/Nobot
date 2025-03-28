@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 import yt_dlp as youtube_dl
+import time
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
@@ -17,6 +18,7 @@ bot = commands.Bot(intents=intents, command_prefix='/')
 # 음성 채널에 연결하고 음악을 재생하는 명령어
 @bot.command(name="play", aliases=["재생"])
 async def play(ctx, *, query):
+    start_time = time.time()
     await ctx.message.delete()
     # 음성 채널에 연결
     if not ctx.author.voice:
@@ -26,6 +28,10 @@ async def play(ctx, *, query):
         if not ctx.voice_client:
             channel = ctx.author.voice.channel
             await channel.connect()
+                # 소요 시간 출력
+            elapsed = time.time() - start_time
+            print(f'음성 채널 접속: {elapsed:.6f}초 소요')
+            start_time = time.time()
 
             # 유튜브 링크에서 정보를 가져오고, 음성 재생을 위한 설정
         ydl_opts = {
@@ -45,12 +51,21 @@ async def play(ctx, *, query):
             if query.startswith("http") and ".com" in query:
                 info = ydl.extract_info(query, download=False)
             else:
-                info = ydl.extract_info(f'ytsearch:{query}', download=False)
-                info = info['entries'][0]
+                info = ydl.extract_info(f'ytsearch1:{query}', download=False)
+                # info = info['entries'][0]
 
             url = info['url'] if info else ''
+
+            elapsed = time.time() - start_time
+            print(f'유튜브 음원 url 추출: {elapsed:.6f}초 소요')
+            start_time = time.time()
+
             audio = discord.FFmpegPCMAudio(url, before_options='-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 3',
                                       options='-vn', executable=ffmpeg_path)
+
+            elapsed = time.time() - start_time
+            print(f'음원 FFmpeg 변환: {elapsed:.6f}초 소요')
+
             ctx.voice_client.play(audio)
             title = info['fulltitle']
             artist = info['uploader']
