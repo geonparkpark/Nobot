@@ -12,7 +12,6 @@ __pycache__/
 # 환경 설정 파일
 config.json
 settings.yaml
-requirements.txt
 요구.txt
 
 # 로그 및 임시 파일
@@ -23,5 +22,10 @@ logs/
 ffmpeg.exe
 
 # 데이터
-/data/
+data/
 *.mp3
+
+# 테스트 파일
+dicordtest.py
+redistest.py
+yttest.py
