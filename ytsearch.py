@@ -1,29 +1,40 @@
-import os
 import time
-from dotenv import load_dotenv
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from oauth2client.tools import argparser
+import yt_dlp
 
-load_dotenv()
-YTAPI_KEY = os.getenv("YTAPI_KEY")
-print(f'YTAPI_KEY: {YTAPI_KEY}')
+ydl_opts = {
+            'format': 'bestaudio/best',
+            'outtmpl': '-',
+            'extract_flat': True,
+            'noplaylist': True,
+            'quiet': True,
+            }
 
-YOUTUBE_API_SERVICE_NAME = 'youtube'
-YOUTUBE_API_VERSION = 'v3'
-yt = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=YTAPI_KEY)
-
-#query = 'The Weeknd - Open Hearts (Single Version) (Audio)'
 def search_id_yt(query):
     start_time = time.time()
-    query = query.replace(' ', '+')
-    search_response = yt.search()\
-                        .list(q=query,
-                              part='snippet',
-                              maxResults=1)\
-                        .execute()
-    elapsed = time.time() - start_time
-    print(f'yt_api Search: {elapsed:.6f}초 소요')
-    return search_response['items'][0]['id']['videoId'] if search_response else None
 
-#search_id_yt(query)
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        link = f'ytsearch1:{query}'
+        info = ydl.extract_info(link, download=False)
+
+    elapsed = time.time() - start_time
+    print(f'유튜브 id 검색: {elapsed:.6f}초 소요')
+
+    url = info['entries'][0]['url'] if 'entries' in info else info['url']
+    return url.split('watch?v=')[-1].split('?')[0]
+
+def get_streamingdata(v_id):
+    start_time = time.time()
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        url = f'https://www.youtube.com/watch?v={v_id}'
+        info = ydl.extract_info(url, download=False)
+        data = {'artist': info['channel'],
+                'title': info['fulltitle'],
+                'url': info['url'],
+                'thumbnail': info['thumbnails'][0]['url'],
+                } if info else []
+
+    elapsed = time.time() - start_time
+    print(f'유튜브 스트리밍 url 추출: {elapsed:.6f}초 소요')
+
+    return data
