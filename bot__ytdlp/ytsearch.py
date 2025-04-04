@@ -7,13 +7,17 @@ ydl_opts = {
             'extract_flat': True,
             'noplaylist': True,
             'quiet': True,
+            'skip_download': True,
+            # "nocheckcertificate": True,
+            "no_cache_dir": True,
+            "rm-cache-dir": True,
             }
 
-def search_id_yt(query):
+async def search_id_yt(query):
     start_time = time.time()
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        link = f'ytsearch1:{query}'
+        link = f'ytsearch1:{query} "auto-generated"'
         info = ydl.extract_info(link, download=False)
 
     elapsed = time.time() - start_time
@@ -22,10 +26,10 @@ def search_id_yt(query):
     url = info['entries'][0]['url'] if 'entries' in info else info['url']
     return url.split('watch?v=')[-1].split('?')[0]
 
-def get_streamingdata(v_id):
+async def get_streamingdata(v_id):
     start_time = time.time()
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    with (yt_dlp.YoutubeDL(ydl_opts) as ydl):
         url = f'https://www.youtube.com/watch?v={v_id}'
         info = ydl.extract_info(url, download=False)
         data = {'artist': info['channel'],
