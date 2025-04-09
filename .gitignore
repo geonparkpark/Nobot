@@ -29,3 +29,8 @@ data/
 dicordtest.py
 redistest.py
 yttest.py
+
+*.key
+*.pub
+
+proxy/
