@@ -1,8 +1,11 @@
-from ytsearch import search_id_yt, get_streamingdata
 from redis_API import RedisClient
+from ytsearch import search_id_yt, get_streamingdata
 
 redis_client = RedisClient()
-redis_client.connect()
+
+    # ** lifespan 이벤트에서만 사용 **
+async def setup_redis():
+    await redis_client.connect()
 
 def is_yt_link(query):
     return query.startswith("http") and "youtube.com" in query
@@ -28,7 +31,7 @@ async def get_v_id(query):
 async def get_data(v_id):
     data = await redis_client.hgetall(f'video:{v_id}')
     if not data:
-        data = push_data(v_id)
+        data = await push_data(v_id)
 
     return data
 

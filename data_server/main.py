@@ -1,7 +1,13 @@
 from fastapi import FastAPI, Query, HTTPException
-from search import search_music_data, push_data
+from search import setup_redis, search_music_data, push_data
+from contextlib import asynccontextmanager
 
 app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await setup_redis()
+    yield
 
 @app.get("/search")
 async def search(query: str = Query(..., description="검색할 곡 이름 또는 키워드")):
