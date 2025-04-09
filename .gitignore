@@ -26,9 +26,7 @@ data/
 *.mp3
 
 # 테스트 파일
-dicordtest.py
-redistest.py
-yttest.py
+*test.py
 
 *.key
 *.pub
