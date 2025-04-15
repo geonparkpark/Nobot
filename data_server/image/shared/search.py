@@ -10,7 +10,7 @@ async def setup_redis():
 def is_yt_link(query):
     return query.startswith("http") and "youtube.com" in query
 
-async def push_data(v_id, redis_client=redis_client):
+async def push_data(v_id):
     data = await get_streamingdata(v_id)
     await redis_client.hset(f'video:{v_id}', data)
 

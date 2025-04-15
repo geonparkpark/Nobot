@@ -17,7 +17,7 @@ async def auto_update_data():
         if message and message["type"] == "pmessage":
             try:
                 v_id = message["data"].split(':')[-1]
-                await push_data(v_id, redis_client)
+                await push_data(v_id)
 
                 now = time.localtime()  # 현재 시간 정보를 time.struct_time 객체로 가져옴
                 formatted_time = time.strftime("%H:%M", now)  # 시:분 형식으로 포맷팅

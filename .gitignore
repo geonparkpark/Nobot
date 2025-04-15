@@ -32,3 +32,6 @@ data/
 *.pub
 
 proxy/
+
+# docker
+*.tar

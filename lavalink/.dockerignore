@@ -1,7 +1,8 @@
 __pycache__/
 *.pyc
 .git/
-.env
 .ssh/
 logs/
 plugins/
+.env
+*.tar
