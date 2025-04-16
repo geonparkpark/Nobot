@@ -27,11 +27,13 @@ data/
 
 # 테스트 파일
 *test.py
+test.py
 
 *.key
 *.pub
 
 proxy/
+bot_localtest
 
 # docker
 *.tar
