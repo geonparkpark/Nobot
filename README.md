@@ -56,19 +56,21 @@ _본 프로젝트는 학습 및 테스트 목적의 비공개 실험용 환경�
 ## 세부 정보
 
 - [docs/architecture.md](./docs/architecture.md): 시스템 아키텍처 개요
-- [docs/problem_solutions.md](./docs/problem_solutions.md): 문제 해결사례
+- [docs/problem_solutions.md](./docs/problem_solutions.md): 문제 해결 사례
 - [docs/modules.md](./docs/modules.md): 서버 및 모듈 설명
+- [docs/deployment.md](./docs/deployment.md): 서버 운영 환경 및 배포
 
 ---
 
 ## 의의 및 한계
 
 - YouTube 접속 및 통신 문제, URL TTL 문제, IP 차단 문제 등을 구조적으로 해결
+- 아키텍처 구성으로 주요 기능 성능 대폭 향상
 - yt-dlp 내부 동작을 직접 분석하여 공식 문서에 없는 설정을 찾아냄
 - 클라우드 환경에서 서버 간 기능 분산, 프록시 우회, 캐싱 최적화 구성
 
 > ⚠️ 한계:
 > - YouTube 자체의 정책 변경이나 Lavalink 의존도에 따라 유지보수 필요
-> - 잦은 봇 차단 현상으로 인해 아키텍처 개선이 요구됨 (개인 프로젝트로서의 한계)
+> - 잦은 봇 차단 현상으로 인해 아키텍처 개선이 요구됨 (개인 프로젝트, 무료 플랜으로서의 한계)
 > - 추천 알고리즘 및 사용자 맞춤형 기능 부재 (후속 과제로 예정)
 
