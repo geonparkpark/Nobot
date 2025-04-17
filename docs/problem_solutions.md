@@ -1,10 +1,10 @@
 # 문제 해결 사례
 
 ## 1. yt-dlp extractor_args 무시 문제
-### 문제:
-  1. 스트리밍 url을 추출할 클라이언트를 선택하는 방법이 공식 문서에 기재됨
-    - `'extractor_args': ['youtube:player_client=tv']`
-  2. 공식 문서, 웹 검색, ChatGPT를 활용해도 yt-dlp 모듈 수행에 반영이 안 됨<br>(web, ios 까지 fallback 시도하는 것을 볼 수 있음)
+### 문제
+  - 스트리밍 url을 추출할 클라이언트를 선택하는 방법이 공식 문서에 기재됨
+  - `'extractor_args': ['youtube:player_client=tv']`
+  - 공식 문서, 웹 검색, ChatGPT를 활용해도 yt-dlp 모듈 수행에 반영이 안 됨<br>(web, ios 까지 fallback 시도하는 것을 볼 수 있음)
   - ![문제 상황](./img/yt-dlp_issue.png)
 ### 원인 분석: 두 가지 가능성
   - yt-dlp의 작동 방식이 업데이트 되었으나 패치 노트에 반영되지 않았을 가능성
