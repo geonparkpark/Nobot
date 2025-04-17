@@ -1,4 +1,4 @@
-import httpx  # 비동기 HTTP 클라이언트
+import httpx
 import os
 
 DATA_SERVER_URL = os.getenv("DATA_SERVER_URL", "http://localhost:8000")
