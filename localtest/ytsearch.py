@@ -12,16 +12,23 @@ ydl_opts = {
     'extractor_args': {
         'youtube': {
             'skip': ['dash', 'translated_subs'],
-            'player_client': ['web']
+            'player_client': ['tv']
             }
         },
 
+    # 'http_headers': {
+    #     'User-Agent': 'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+    #     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    #     'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+    #     'Referer': 'https://www.youtube.com/',
+    #     'Sec-Fetch-Mode': 'navigate'
+    # },
+
     'http_headers': {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Referer': 'https://www.youtube.com/',
-        'Sec-Fetch-Mode': 'navigate'
+        'User-Agent': 'Mozilla/5.0 (SmartTV; Linux; Tizen 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+        'X-YouTube-Client-Name': '85',
+        'X-YouTube-Client-Version': '7.20250409.08.00',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
     },
 
     #   for Android client
@@ -43,8 +50,7 @@ async def search_id_yt(query):
     start_time = time.time()
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        # link = f'ytsearch1:{query} "auto-generated"'
-        link = f'ytsearch1:{query}'
+        link = f'ytsearch1:{query} "auto-generated"'
         info = ydl.extract_info(link, download=False)
         print(info)
 
@@ -72,6 +78,6 @@ async def get_streamingdata(v_id):
     return data
 
 # v_id = asyncio.run(search_id_yt('sik k lov3'))
-v_id = '8CWy_-afIpY'
+v_id = '7mjg-7ibaQA'
 data = asyncio.run(get_streamingdata(v_id))
 print(data)
