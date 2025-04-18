@@ -23,6 +23,9 @@
 #### TTL 지원 및 `Keyspace Notification` 기능 제공
   - 데이터의 Key에 TTL을 부여하여 URL 만료 구현
   - `Keyspace Notification` 기능을 활용하여 `Redis`로부터 실시간으로 키 만료 이벤트 구독
+#### 큰 저장 공간이 필요하지 않음
+  - 저장할 데이터는 `검색어 -> 영상 ID`, `영상 ID -> 영상 메타데이터` 매핑
+  - 메모리 기반 저장 방식으로 저장 공간 충분
 
 ### 데이터 구조 및 프로세스 설계
   - `search:` 사용자의 검색어 -> 영상 ID 매핑을 YouTube 검색 결과 기준으로 저장`(ex: search:hotlesserafim -> cCkAcVOS3ig)`
