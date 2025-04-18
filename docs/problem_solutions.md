@@ -1,30 +1,6 @@
 # 문제 해결 사례
 
-## 1. yt-dlp extractor_args 무시 문제
-### 문제
-  - 스트리밍 url을 추출할 클라이언트를 선택하는 방법이 공식 문서에 기재됨
-  - `'extractor_args': ['youtube:player_client=tv']`
-  - 공식 문서, 웹 검색, ChatGPT를 활용해도 yt-dlp 모듈 수행에 반영이 안 됨<br>(web, ios 까지 fallback 시도하는 것을 볼 수 있음)
-  - ![문제 상황](./img/yt-dlp_issue.png)
-### 원인 분석: 두 가지 가능성
-  - yt-dlp의 작동 방식이 업데이트 되었으나 패치 노트에 반영되지 않았을 가능성
-  - CLI에서의 처리 로직과 Python 라이브러리 호출 간 처리 방식 차이 가능성
-### 해결 과정:
-  1. yt-dlp는 데이터를 추출하기 전에 각 인자들을 딕셔너리의 키: 값 형태로 받아 로직 결정
-  2. 라이브러리의 코드에서 'extractor_args' 인자를 처리하는 함수를 찾음
-  3. `./extractor/common.py` 모듈의 `_configuration_arg` 함수에서 사용됨
-  4. `extractor_args` 문자열을 입력으로 받는 `traverse_obj` 함수 분석
-  5. `traverse_obj`는 다층 키: 값 구조를 안전하게 푸는 함수임을 알게 됨
-  6. 따라서, `extractor_args`의 값에 하위 설정들을 키: 값 매핑으로 부여해야 함
-### 결과:
-  - 추출 시간 단축: **평균 4.5초 -> 3.5초(tv), 2초(android)**
-  - 로그 확인 결과 더 이상 불필요한 클라이언트(ios)를 세팅하지 않는 것을 알 수 있음
-  - `'extractor_args': {'youtube': {'skip': ['dash', 'translated_subs'],'player_client': ['tv']}}`
-  - ![문제 해결](./img/yt-dlp_solved.png)
-
----
-
-## 2. Redis 도입 및 TTL 만료 이벤트 기반 URL 자동 갱신 아키텍처 개선 사례
+## 1. Redis 도입 및 TTL 만료 이벤트 기반 URL 자동 갱신 아키텍처 개선 사례
 ### 문제: yt-dlp 직접 호출 방식의 한계
   1. yt-dlp가 스트리밍 url을 한번 추출하면 유튜브에 평균 5번의 요청을 보냄(클라이언트마다 다름)
   2. 유저가 `/play` 명령을 한 번 실행할 때마다 최대 8번의 요청을 보냄
@@ -56,6 +32,30 @@
   - 재생 시간 단축: 첫 재생 **평균 5초 -> 평균 0.7초**(*캐싱된 음원에 한하여*)
   - YouTube API 요청 수 감소: 첫 재생 **평균 6회 ->  1회**(*캐싱된 음원에 한하여*)
   - 서버 부하 감소 및 네트워크 외부 트래픽 감소
+
+---
+
+## 2. yt-dlp extractor_args 무시 문제
+### 문제
+  - 스트리밍 url을 추출할 클라이언트를 선택하는 방법이 공식 문서에 기재됨
+  - `'extractor_args': ['youtube:player_client=tv']`
+  - 공식 문서, 웹 검색, ChatGPT를 활용해도 yt-dlp 모듈 수행에 반영이 안 됨<br>(web, ios 까지 fallback 시도하는 것을 볼 수 있음)
+  - ![문제 상황](./img/yt-dlp_issue.png)
+### 원인 분석: 두 가지 가능성
+  - yt-dlp의 작동 방식이 업데이트 되었으나 패치 노트에 반영되지 않았을 가능성
+  - CLI에서의 처리 로직과 Python 라이브러리 호출 간 처리 방식 차이 가능성
+### 해결 과정:
+  1. yt-dlp는 데이터를 추출하기 전에 각 인자들을 딕셔너리의 키: 값 형태로 받아 로직 결정
+  2. 라이브러리의 코드에서 'extractor_args' 인자를 처리하는 함수를 찾음
+  3. `./extractor/common.py` 모듈의 `_configuration_arg` 함수에서 사용됨
+  4. `extractor_args` 문자열을 입력으로 받는 `traverse_obj` 함수 분석
+  5. `traverse_obj`는 다층 키: 값 구조를 안전하게 푸는 함수임을 알게 됨
+  6. 따라서, `extractor_args`의 값에 하위 설정들을 키: 값 매핑으로 부여해야 함
+### 결과:
+  - 추출 시간 단축: **평균 4.5초 -> 3.5초(tv), 2초(android)**
+  - 로그 확인 결과 더 이상 불필요한 클라이언트(ios)를 세팅하지 않는 것을 알 수 있음
+  - `'extractor_args': {'youtube': {'skip': ['dash', 'translated_subs'],'player_client': ['tv']}}`
+  - ![문제 해결](./img/yt-dlp_solved.png)
 
 ---
 
